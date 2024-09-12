@@ -8,7 +8,7 @@ import {
 } from "react-icons/hi";
 
 type Props = {
-  data: any;
+  data: Registration;
 };
 
 const RegistrationCard = (props: Props) => {

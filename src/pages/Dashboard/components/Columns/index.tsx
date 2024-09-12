@@ -9,20 +9,21 @@ const allColumns = [
 ];
 
 type Props = {
-  registrations?: any[];
+  registrations?: Registration[];
 };
-const Collumns = (props: Props) => {
+
+const Collumns = ({ registrations }: Props) => {
   return (
     <S.Container>
-      {allColumns.map((collum) => {
+      {allColumns.map((column) => {
         return (
-          <S.Column status={collum.status} key={collum.title}>
+          <S.Column status={column.status} key={column.title}>
             <>
-              <S.TitleColumn status={collum.status}>
-                {collum.title}
+              <S.TitleColumn status={column.status}>
+                {column.title}
               </S.TitleColumn>
               <S.CollumContent>
-                {props?.registrations?.map((registration) => {
+                {registrations?.map((registration) => {
                   return (
                     <RegistrationCard
                       data={registration}
