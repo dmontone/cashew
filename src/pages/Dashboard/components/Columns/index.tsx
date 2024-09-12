@@ -1,4 +1,3 @@
-
 import * as S from "./styles";
 import RegistrationCard from "../RegistrationCard";
 
