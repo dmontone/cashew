@@ -1,4 +1,4 @@
-import { ButtonSmall } from "~/components/Buttons";
+import { ButtonSmall } from "~/components";
 import * as S from "./styles";
 import {
   HiOutlineMail,
@@ -11,7 +11,7 @@ type Props = {
   data: Registration;
 };
 
-const RegistrationCard = (props: Props) => {
+export const RegistrationCard = (props: Props) => {
   return (
     <S.Card>
       <S.IconAndText>
@@ -36,5 +36,3 @@ const RegistrationCard = (props: Props) => {
     </S.Card>
   );
 };
-
-export default RegistrationCard;

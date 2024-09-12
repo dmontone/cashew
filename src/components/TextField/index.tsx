@@ -6,7 +6,7 @@ type Props = {
   error?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const TextField = (props: Props) => {
+export const TextField = (props: Props) => {
   return (
     <div>
       <label htmlFor={props.id}>{props.label}</label>
@@ -15,5 +15,3 @@ const TextField = (props: Props) => {
     </div>
   );
 };
-
-export default TextField;

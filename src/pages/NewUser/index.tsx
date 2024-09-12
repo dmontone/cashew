@@ -1,11 +1,10 @@
-import TextField from "~/components/TextField";
 import * as S from "./styles";
 import { HiOutlineArrowLeft } from "react-icons/hi";
-import { Button, IconButton } from "~/components/Buttons";
+import { Button, IconButton, TextField } from "~/components";
 import { useHistory } from "react-router-dom";
 import routes from "~/router/routes";
 
-const NewUserPage = () => {
+export const NewUserPage = () => {
   const history = useHistory();
   const goToHome = () => {
     history.push(routes.dashboard);
@@ -26,5 +25,3 @@ const NewUserPage = () => {
     </S.Container>
   );
 };
-
-export default NewUserPage;

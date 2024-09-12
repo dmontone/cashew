@@ -1,20 +1,15 @@
 import * as S from "./styles";
-import RegistrationCard from "../RegistrationCard";
-
-const allColumns = [
-  { status: 'REVIEW', title: "Pronto para revisar" },
-  { status: 'APPROVED', title: "Aprovado" },
-  { status: 'REPROVED', title: "Reprovado" },
-];
+import { ALL_COLUMNS } from './constants'
+import { RegistrationCard } from "../RegistrationCard";
 
 type Props = {
   registrations?: Registration[];
 };
 
-const Collumns = ({ registrations }: Props) => {
+export const Collumns = ({ registrations }: Props) => {
   return (
     <S.Container>
-      {allColumns.map((column) => {
+      {ALL_COLUMNS.map((column) => {
         return (
           <S.Column status={column.status} key={column.title}>
             <>
@@ -38,4 +33,3 @@ const Collumns = ({ registrations }: Props) => {
     </S.Container>
   );
 };
-export default Collumns;
