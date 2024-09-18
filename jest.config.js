@@ -1,6 +1,5 @@
 /** @type {import('jest').Config} */
 export default {
-  verbose: true,
   preset: "ts-jest",
   testEnvironment: "jsdom",
   transform: {
@@ -10,5 +9,22 @@ export default {
   moduleNameMapper: {
     "^~/(.+)": "<rootDir>/src/$1",
   },
-//   setupFilesAfterEnv: ["@testing-library/jest-dom/extend-expect"],
-};
+  collectCoverage: true,
+  collectCoverageFrom: [
+    "src/**/*.(tsx|ts)",
+    "!src/(main|App).(tsx|ts)",
+    "!src/router/*.(tsx|ts)",
+    "!src/**/index.(tsx|ts)",
+    "!src/**/styles.(tsx|ts)",
+    "!src/**/constants.ts",
+    "!src/**/*.d.ts",
+  ],
+  coverageThreshold: {
+    "global": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  }
+}

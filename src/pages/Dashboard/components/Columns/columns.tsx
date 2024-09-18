@@ -10,10 +10,6 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 export const Collumns = () => {
   const [{ isFetching }] = useContext(DashContext)
 
-  // useEffect(() => {
-  //   dispatch({ type: 'FETCH_CARDS_INIT' })
-  // }, [dispatch])
-
   return (
     <S.Container>
       {
