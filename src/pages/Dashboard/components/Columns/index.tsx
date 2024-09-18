@@ -1,15 +1,32 @@
-import * as S from "./styles";
+import * as S from './styles'
 import { ALL_COLUMNS } from './constants'
-import { RegistrationCard } from "../RegistrationCard";
+import { useContext } from 'react'
+import { DashContext } from '../../context'
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+// import { RegistrationCard } from "../RegistrationCard"
+// import { useContext, useEffect } from 'react'
+// import { DashContext } from '../../context'
 
-type Props = {
-  registrations?: Registration[];
-};
+export const Collumns = () => {
+  const [{ isFetching }] = useContext(DashContext)
 
-export const Collumns = ({ registrations }: Props) => {
+  // useEffect(() => {
+  //   dispatch({ type: 'FETCH_CARDS_INIT' })
+  // }, [dispatch])
+
   return (
     <S.Container>
-      {ALL_COLUMNS.map((column) => {
+      {
+        ALL_COLUMNS.map(({ status, title }) => (
+          <S.Column key={title} $status={status} $isFetching={isFetching}>
+            <S.TitleColumn>
+              {title}
+              <AiOutlineLoading3Quarters />
+            </S.TitleColumn>
+          </S.Column>
+        ))
+      }
+      {/* {ALL_COLUMNS.map((column) => {
         return (
           <S.Column status={column.status} key={column.title}>
             <>
@@ -23,13 +40,13 @@ export const Collumns = ({ registrations }: Props) => {
                       data={registration}
                       key={registration.id}
                     />
-                  );
+                  )
                 })}
               </S.CollumContent>
             </>
           </S.Column>
-        );
-      })}
+        )
+      })} */}
     </S.Container>
-  );
-};
+  )
+}

@@ -1,23 +1,15 @@
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components"
 
-const registrationStatusStyles: {
-  [key in string]: { background: string; title: string };
-} = {
-  REVIEW: {
-    background: "#FDF8E9",
-    title: "#EFC24D",
-  },
-  APPROVED: {
-    background: "#EEEEFD",
-    title: "#4242DF",
-  },
-  REPROVED: {
-    background: "#FBEDF6",
-    title: "#CE2893",
-  },
-};
+const stylesByStatus: { [key in RegistrationStatuses]: { bg: string; color: string } } = {
+  REVIEW: { bg: "#FDF8E9", color: "#EFC24D" },
+  APROVED: { bg: "#EEEEFD", color: "#4242DF" },
+  REPROVED: { bg: "#FBEDF6", color: "#CE2893" },
+}
 
-type StatusTypes = 'REVIEW' | 'APPROVED' | 'REPROVED'
+const rotation = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`
 
 export const Container = styled.div`
   display: grid;
@@ -25,24 +17,41 @@ export const Container = styled.div`
   grid-gap: 24px;
   justify-content: center;
   margin-top: 24px;
-`;
+`
+export const TitleColumn = styled.h3`
+  margin: 0px;
+  margin: 24px;
 
-export const Column = styled.div<{ status: StatusTypes }>`
+  svg {
+    color: #241c15;
+    margin-left: 8px;
+    width: 14px;
+    height: 14px;
+
+    animation: ${rotation} 1s linear infinite;
+  }
+`
+
+export const Column = styled.div<{ $status: RegistrationStatuses, $isFetching?: boolean }>`
   height: auto;
-  background-color: ${({ status }) =>
-    registrationStatusStyles[status].background};
+  background-color: ${({ $status }) => stylesByStatus[$status].bg};
   border-radius: 32px;
   min-height: 80vh;
   max-height: 80vh;
-`;
 
-export const TitleColumn = styled.h3<{ status: StatusTypes }>`
-  margin: 0px;
-  color: ${({ status }) => registrationStatusStyles[status].title};
-  margin: 24px;
-`;
+  ${TitleColumn} {
+    color: ${({ $status }) => stylesByStatus[$status].color};
+    ${({ $isFetching }) => !$isFetching && css`
+      svg {
+        display: none;
+      }
+    `};
+  }
+`
 
 export const CollumContent = styled.div`
   overflow: auto;
   max-height: 85%;
-`;
+`
+
+/* color: ${({ status }) => stylesByStatus[status].title}; */

@@ -1,14 +1,14 @@
 import { Collumns, SearchBar } from "./components"
-import { DashboardProvider } from './context'
+import { DashProvider } from './context'
 import * as S from "./styles"
 
 export const DashboardPage = () => {
   return (
     <S.Container>
-      <DashboardProvider>
+      <DashProvider>
         <SearchBar />
         <Collumns />
-      </DashboardProvider>
+      </DashProvider>
     </S.Container>
   )
 }

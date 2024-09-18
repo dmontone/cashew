@@ -1,14 +1,17 @@
-import { FC, ReactNode, createContext, useReducer } from 'react'
-import { getDashboardActions } from './actions'
+import { createContext, Dispatch, FC, ReactNode, useReducer } from 'react'
+import { DashReducer, initialState } from './reducer'
+import { DashActionsInputType, DashReducerInterface, DashStateType } from './types'
 
-export const DashboardContext = createContext({})
+type ContextType = [DashStateType, Dispatch<DashActionsInputType>]
+export const DashContext = createContext<ContextType>([initialState, () => { }])
 
-export const DashboardProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(() => {}, undefined)
+export const DashProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const reducer = useReducer<DashReducerInterface>(DashReducer, initialState)
 
   return (
-    <DashboardContext.Provider value={[state, getDashboardActions(dispatch)]}>
+    <DashContext.Provider value={reducer}>
       {children}
-    </DashboardContext.Provider>
+    </DashContext.Provider>
   )
 }
+
