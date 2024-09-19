@@ -6,13 +6,18 @@ export default {
     "^.+\\.tsx?$": ["ts-jest", { isolatedModules: true }],
     "^.+\\.(js|jsx)$": "babel-jest",
   },
+  testRegex: "(test|spec)\\.(ts|tsx)",
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   moduleNameMapper: {
     "^~/(.+)": "<rootDir>/src/$1",
   },
+  setupFilesAfterEnv: [
+    "<rootDir>/node_modules/@testing-library/jest-dom"
+  ],
   collectCoverage: true,
   collectCoverageFrom: [
     "src/**/*.(tsx|ts)",
-    "!src/(main|App).(tsx|ts)",
+    "!src/*.(tsx|ts)",
     "!src/router/*.(tsx|ts)",
     "!src/**/index.(tsx|ts)",
     "!src/**/styles.(tsx|ts)",
