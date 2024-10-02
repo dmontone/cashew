@@ -22,6 +22,7 @@ export default {
     "!src/**/index.(tsx|ts)",
     "!src/**/styles.(tsx|ts)",
     "!src/**/constants.ts",
+    "!src/**/context/*.(tsx|ts)",
     "!src/**/*.d.ts",
   ],
   coverageThreshold: {

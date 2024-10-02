@@ -32,15 +32,18 @@ export const TitleColumn = styled.h3`
   }
 `
 
-export const Column = styled.div<{ $status: RegistrationStatuses, $isFetching?: boolean }>`
+export const Column = styled.div<{
+  $status: RegistrationStatuses,
+  $isFetching?: boolean
+}>`
   height: auto;
-  background-color: ${({ $status }) => stylesByStatus[$status].bg};
+  background-color: ${({ $status = 'REVIEW' }) => stylesByStatus[$status].bg};
   border-radius: 32px;
   min-height: 80vh;
   max-height: 80vh;
 
   ${TitleColumn} {
-    color: ${({ $status }) => stylesByStatus[$status].color};
+    color: ${({ $status = 'REVIEW' }) => stylesByStatus[$status].color};
     ${({ $isFetching }) => !$isFetching && css`
       svg {
         display: none;

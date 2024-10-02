@@ -20,7 +20,7 @@ export const NewUserPage = () => {
         <TextField placeholder="Email" label="Email" type="email" />
         <TextField placeholder="CPF" label="CPF" />
         <TextField label="Data de admissão" type="date" />
-        <Button onClick={() => {}}>Cadastrar</Button>
+        <Button onClick={() => goToHome()}>Cadastrar</Button>
       </S.Card>
     </S.Container>
   );

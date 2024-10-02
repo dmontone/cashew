@@ -1,4 +1,5 @@
-import { ButtonSmall } from "~/components"
+import { FC } from 'react'
+import { ButtonSmall } from '~/components'
 import * as S from "./styles"
 import {
   HiOutlineMail,
@@ -7,24 +8,24 @@ import {
   HiOutlineTrash,
 } from "react-icons/hi"
 
-type Props = {
-  data: RegistrationType
-}
-
-export const RegistrationCard = (props: Props) => {
+export const RegistrationCard: FC<RegistrationType> = ({
+  admissionDate,
+  email,
+  employeeName
+}) => {
   return (
     <S.Card>
       <S.IconAndText>
         <HiOutlineUser />
-        <h3>{props.data.employeeName}</h3>
+        <h3>{employeeName}</h3>
       </S.IconAndText>
       <S.IconAndText>
         <HiOutlineMail />
-        <p>{props.data.email}</p>
+        <p>{email}</p>
       </S.IconAndText>
       <S.IconAndText>
         <HiOutlineCalendar />
-        <span>{props.data.admissionDate}</span>
+        <span>{admissionDate}</span>
       </S.IconAndText>
       <S.Actions>
         <ButtonSmall bgcolor="rgb(255, 145, 154)" >Reprovar</ButtonSmall>

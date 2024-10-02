@@ -1,22 +1,12 @@
-
 import { render, screen } from '@testing-library/react'
-import { Button } from './styles'
+import { IconButton } from './icon-button'
 
 describe('components/buttons/icon-button', () => {
   it('should render children text node', () => {
-    render(<Button>Ativar</Button>)
-    const button = screen.getByText(/Ativar/)
-    expect(button).toBeInTheDocument()
+    render(<IconButton>ICON_BUTTON_TEST_TEXT</IconButton>)
+
+    const iconButton = screen.getByText('ICON_BUTTON_TEST_TEXT')
+    
+    expect(iconButton).toBeInTheDocument()
   })
 })
-
-
-// import { Button } from ".";
-// import { render, renderHook, screen } from "@testing-library/react";
-
-// describe("Button", () => {
-//   it("Should show button", () => {
-//     render(<Button>Ativar</Button>);
-//     expect(screen.getByRole("button", { name: /ativar/i }));
-//   });
-// });
