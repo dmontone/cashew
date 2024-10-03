@@ -1,14 +1,12 @@
 import * as S from './styles'
 import { ALL_COLUMNS } from './constants'
 import { useContext } from 'react'
-import { DashContext } from '../../context'
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-// import { RegistrationCard } from "../RegistrationCard"
-// import { useContext, useEffect } from 'react'
-// import { DashContext } from '../../context'
+import { AiOutlineLoading3Quarters } from "react-icons/ai"
+import { DashContext } from '~/context'
+import { RegistrationCard } from '../RegistrationCard'
 
 export const Collumns = () => {
-  const [{ isFetching }] = useContext(DashContext)
+  const [{ isFetching, registrations }] = useContext(DashContext)
 
   return (
     <S.Container>
@@ -17,32 +15,20 @@ export const Collumns = () => {
           <S.Column key={title} $status={status} $isFetching={isFetching}>
             <S.TitleColumn>
               {title}
-              <AiOutlineLoading3Quarters />
+              <AiOutlineLoading3Quarters role='img' aria-label='loading' />
             </S.TitleColumn>
+            <S.CollumContent>
+              {
+                registrations && registrations
+                  .filter(registration => registration.status === status)
+                  .map(registration => (
+                    <RegistrationCard key={registration.id} {...registration} />
+                  ))
+              }
+            </S.CollumContent>
           </S.Column>
         ))
       }
-      {/* {ALL_COLUMNS.map((column) => {
-        return (
-          <S.Column status={column.status} key={column.title}>
-            <>
-              <S.TitleColumn status={column.status}>
-                {column.title}
-              </S.TitleColumn>
-              <S.CollumContent>
-                {registrations?.map((registration) => {
-                  return (
-                    <RegistrationCard
-                      data={registration}
-                      key={registration.id}
-                    />
-                  )
-                })}
-              </S.CollumContent>
-            </>
-          </S.Column>
-        )
-      })} */}
     </S.Container>
   )
 }

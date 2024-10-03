@@ -8,10 +8,11 @@ import {
   HiOutlineTrash,
 } from "react-icons/hi"
 
-export const RegistrationCard: FC<RegistrationType> = ({
+export const RegistrationCard: FC<Partial<RegistrationType>> = ({
   admissionDate,
   email,
-  employeeName
+  employeeName,
+  status
 }) => {
   return (
     <S.Card>
@@ -28,9 +29,9 @@ export const RegistrationCard: FC<RegistrationType> = ({
         <span>{admissionDate}</span>
       </S.IconAndText>
       <S.Actions>
-        <ButtonSmall bgcolor="rgb(255, 145, 154)" >Reprovar</ButtonSmall>
-        <ButtonSmall bgcolor="rgb(155, 229, 155)">Aprovar</ButtonSmall>
-        <ButtonSmall bgcolor="#ff8858">Revisar novamente</ButtonSmall>
+        {status !== 'REPROVED' && <ButtonSmall bgcolor="rgb(255, 145, 154)" >Reprovar</ButtonSmall>}
+        {status !== 'APROVED' && <ButtonSmall bgcolor="rgb(155, 229, 155)">Aprovar</ButtonSmall>}
+        {status !== 'REVIEW' && <ButtonSmall bgcolor="#ff8858">Revisar novamente</ButtonSmall>}
 
         <HiOutlineTrash />
       </S.Actions>

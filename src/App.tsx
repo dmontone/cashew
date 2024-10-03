@@ -1,5 +1,6 @@
 import Router from "~/router";
 import { Header } from "./components/Header";
+import { DashProvider } from './context'
 
 function App() {
   return (
@@ -7,7 +8,9 @@ function App() {
       <Header>
         <h1>Caju Front Teste</h1>
       </Header>
-      <Router />
+      <DashProvider>
+        <Router />
+      </DashProvider>
     </>
   );
 }
