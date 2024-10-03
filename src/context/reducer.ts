@@ -15,9 +15,7 @@ export const DashReducer: DashReducerInterface = (state, action) => {
         ...state,
         isFetched: false,
         isFetching: true,
-        isError: false,
-        error: undefined,
-        registrations: []
+        isError: false
       }
 
     case 'FETCH_CARDS_SUCCESS':

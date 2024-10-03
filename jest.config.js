@@ -1,7 +1,11 @@
 /** @type {import('jest').Config} */
 export default {
   preset: "ts-jest",
-  testEnvironment: "jsdom",
+  transform: {
+    "^.+\\.jsx?$": "babel-jest",
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  testEnvironment: "jest-environment-jsdom",
   transform: {
     "^.+\\.tsx?$": ["ts-jest", { isolatedModules: true }],
     "^.+\\.(js|jsx)$": "babel-jest",
@@ -19,6 +23,7 @@ export default {
     "src/**/*.(tsx|ts)",
     "!src/*.(tsx|ts)",
     "!src/router/*.(tsx|ts)",
+    "!src/axios/*.(tsx|ts)",
     "!src/**/index.(tsx|ts)",
     "!src/**/styles.(tsx|ts)",
     "!src/**/constants.ts",

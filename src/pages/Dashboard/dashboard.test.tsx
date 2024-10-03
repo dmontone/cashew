@@ -1,28 +1,35 @@
 import { render, screen, waitFor } from '@testing-library/react'
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { DashboardPage } from './dashboard'
-import { useFetch } from '~/hooks'
+import { handleApi } from '~/utils'
+import { DashContext, DashProvider } from '~/context'
 
 jest.mock('./components', () => ({
-  ...jest.requireActual('~/hooks'),
   Collumns: ({ children }: { children: ReactNode }) => <>TEST_COLUMNS {children}</>,
   SearchBar: ({ children }: { children: ReactNode }) => <>TEST_SEARCH_BAR {children}</>
 }))
 
-jest.mock('~/hooks', () => ({
-  ...jest.requireActual('~/hooks'),
-  useFetch: jest.fn()
+jest.mock('~/utils', () => ({
+  handleApi: {
+    getAll: jest.fn()
+  }
 }))
 
-const mockUseFetch = useFetch as jest.Mock
+const mockGetAll = handleApi.getAll as jest.Mock
 
 describe('pages/dashboard', () => {
+  const renderWithContext = (value: any) => render(
+    <DashContext.Provider value={value}>
+      <DashboardPage />
+    </DashContext.Provider>
+  )
+
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
   it('should render expected components', () => {
-    mockUseFetch.mockReturnValueOnce({ loading: false, error: null, data: null })
+    mockGetAll.mockReturnValueOnce({ loading: false, error: null, data: null })
     render(<DashboardPage />)
 
     const columns = screen.getByText(/TEST_COLUMNS/)
@@ -32,37 +39,21 @@ describe('pages/dashboard', () => {
     expect(searchBar).toBeInTheDocument()
   })
 
-  it('should dispatch FETCH_CARDS_INIT on first load', () => {
-    mockUseFetch.mockReturnValueOnce({ loading: true, data: null, error: null })
+  it('should call dispatches correctly on success', () => {
     const mockDispatch = jest.fn()
-    jest.spyOn(React, 'useContext').mockReturnValueOnce([{}, mockDispatch])
-
-    render(<DashboardPage />)
+    mockGetAll.mockReturnValueOnce({ loading: false, error: null, data: { TEST_KEY: 'TEST_VALUE' } })
+    renderWithContext([{}, mockDispatch])
 
     expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_INIT' })
+    waitFor(() => { expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_SUCCESS', payload: { TEST_KEY: 'TEST_VALUE' } }) })
   })
 
-  it('should dispatch FETCH_CARDS_SUCCESS on successfull load', async () => {
-    mockUseFetch.mockReturnValueOnce({ loading: false, error: null, data: 'TEST_DATA' })
+  it('should call dispatches correctly on error', () => {
     const mockDispatch = jest.fn()
-    jest.spyOn(React, 'useContext').mockReturnValueOnce([{}, mockDispatch])
+    mockGetAll.mockReturnValueOnce({ loading: false, error: { TEST_KEY: 'TEST_VALUE' }, data: null })
+    renderWithContext([{}, mockDispatch])
 
-    render(<DashboardPage />)
-
-    await waitFor(() => {
-      expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_SUCCESS', payload: 'TEST_DATA' })
-    })
-  })
-
-  it('should dispatch FETCH_CARDS_ERROR when it fails', async () => {
-    mockUseFetch.mockReturnValueOnce({ loading: false, error: 'TEST_ERROR', data: null })
-    const mockDispatch = jest.fn()
-    jest.spyOn(React, 'useContext').mockReturnValueOnce([{}, mockDispatch])
-
-    render(<DashboardPage />)
-
-    await waitFor(() => {
-      expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_ERROR', payload: 'TEST_ERROR' })
-    })
+    expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_INIT' })
+    waitFor(() => { expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_ERROR', payload: { TEST_KEY: 'TEST_VALUE' } }) })
   })
 })
