@@ -7,16 +7,36 @@ jest.mock('~/axios', () => ({
     get: jest.fn(),
     put: jest.fn(),
     delete: jest.fn(),
+    post: jest.fn()
   }
 }))
 
 const mockGet = axiosInstance.get as jest.Mock
 const mockPut = axiosInstance.put as jest.Mock
 const mockDel = axiosInstance.delete as jest.Mock
+const mockPost = axiosInstance.post as jest.Mock
 
 describe('utils/handle-api', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+  })
+
+  it('should return data on success createItem', async () => {
+    mockPost.mockResolvedValueOnce({ data: 'TEST_DATA' })
+
+    const result = await handleApi.createItem({} as RegistrationType)
+
+    expect(axiosInstance.post).toHaveBeenCalledWith('', {})
+    expect(result).toEqual({ data: 'TEST_DATA', error: null })
+  })
+
+  it('should return error on thrown createItem', async () => {
+    mockPost.mockRejectedValueOnce({ message: 'TEST_ERROR' })
+
+    const result = await handleApi.createItem({} as RegistrationType)
+
+    expect(axiosInstance.post).toHaveBeenCalledWith('', {})
+    expect(result).toEqual({ data: null, error: 'TEST_ERROR' })
   })
 
   it('should return data on success getAll', async () => {

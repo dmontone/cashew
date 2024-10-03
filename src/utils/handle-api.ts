@@ -1,6 +1,16 @@
 import { AxiosError, AxiosResponse } from 'axios'
 import { axiosInstance } from '~/axios'
 
+const createItem = async (data: Omit<RegistrationType, 'id'>) => {
+  try {
+    const response = await axiosInstance.post('', data)
+    return { data: response.data, error: null }
+  } catch (e) {
+    const error = e as AxiosError
+    return { data: null, error: error.message }
+  }
+}
+
 const getAll = async () => {
   try {
     const response: AxiosResponse<RegistrationType[]> = await axiosInstance.get('')
@@ -34,5 +44,6 @@ const deleteItem = async (id: string) => {
 export const handleApi = {
   getAll,
   updateStatus,
-  deleteItem
+  deleteItem,
+  createItem
 }

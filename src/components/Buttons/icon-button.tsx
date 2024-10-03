@@ -6,7 +6,7 @@ type IconButtonProps = {
 
 export const IconButton = (props: IconButtonProps) => {
   return (
-    <S.IconButtonStyles {...props}>
+    <S.IconButtonStyles type='button' {...props}>
       {props.children}
     </S.IconButtonStyles>
   );
