@@ -1,6 +1,5 @@
-import { handleApi } from './handle-api'
 import { axiosInstance } from '~/axios'
-import { AxiosResponse } from 'axios'
+import { handleApi } from './handle-api'
 
 jest.mock('~/axios', () => ({
   axiosInstance: {

@@ -1,9 +1,9 @@
 import { DashContext } from '~/context'
 import { RegistrationCard } from './registration-card'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { handleApi } from '~/utils'
-import { act } from 'react'
+import { DashStateType } from '~/context/types'
 
 const mockRegistration: RegistrationType = {
   admissionDate: '01/01/2000',
@@ -29,7 +29,7 @@ const mockDelete = handleApi.updateStatus as jest.Mock
 
 describe('pages/dashboard/components/registration-card', () => {
   const user = userEvent.setup()
-  const renderWithContext = (registration: RegistrationType = mockRegistration, value: any = []) => render(
+  const renderWithContext = (registration: RegistrationType = mockRegistration, value: [DashStateType, jest.Mock] = [{} as DashStateType, jest.fn()]) => render(
     <DashContext.Provider value={value}>
       <RegistrationCard {...registration} />
     </DashContext.Provider>
@@ -79,7 +79,7 @@ describe('pages/dashboard/components/registration-card', () => {
     const mockDispatch = jest.fn()
     mockUpdateStatus.mockResolvedValue({})
     mockGetAll.mockResolvedValue({ data: 'TEST_DATA', error: null })
-    renderWithContext({ ...mockRegistration, status: 'REVIEW' }, [{}, mockDispatch])
+    renderWithContext({ ...mockRegistration, status: 'REVIEW' }, [{} as DashStateType, mockDispatch])
 
     const approveButton = screen.getByText('Aprovar')
     
@@ -98,7 +98,7 @@ describe('pages/dashboard/components/registration-card', () => {
     const mockDispatch = jest.fn()
     mockUpdateStatus.mockResolvedValue({})
     mockGetAll.mockResolvedValue({ data: 'TEST_DATA', error: null })
-    renderWithContext({ ...mockRegistration, status: 'REVIEW' }, [{}, mockDispatch])
+    renderWithContext({ ...mockRegistration, status: 'REVIEW' }, [{} as DashStateType, mockDispatch])
 
     const reproveButton = screen.getByText('Reprovar')
     
@@ -117,7 +117,7 @@ describe('pages/dashboard/components/registration-card', () => {
     const mockDispatch = jest.fn()
     mockUpdateStatus.mockResolvedValue({})
     mockGetAll.mockResolvedValue({ data: 'TEST_DATA', error: null })
-    renderWithContext({ ...mockRegistration, status: 'APROVED' }, [{}, mockDispatch])
+    renderWithContext({ ...mockRegistration, status: 'APROVED' }, [{} as DashStateType, mockDispatch])
 
     const reviewButton = screen.getByText(/Revisar novamente/)
     
@@ -136,7 +136,7 @@ describe('pages/dashboard/components/registration-card', () => {
     const mockDispatch = jest.fn()
     mockDelete.mockResolvedValue({})
     mockGetAll.mockResolvedValue({ data: 'TEST_DATA', error: null })
-    renderWithContext({ ...mockRegistration, status: 'APROVED' }, [{}, mockDispatch])
+    renderWithContext({ ...mockRegistration, status: 'APROVED' }, [{} as DashStateType, mockDispatch])
 
     const deleteButton = screen.getByLabelText('delete')
     
@@ -155,7 +155,7 @@ describe('pages/dashboard/components/registration-card', () => {
     const mockDispatch = jest.fn()
     mockDelete.mockResolvedValue({})
     mockGetAll.mockResolvedValue({ data: null, error: 'TEST_ERROR' })
-    renderWithContext({ ...mockRegistration, status: 'APROVED' }, [{}, mockDispatch])
+    renderWithContext({ ...mockRegistration, status: 'APROVED' }, [{} as DashStateType, mockDispatch])
 
     const deleteButton = screen.getByLabelText('delete')
     

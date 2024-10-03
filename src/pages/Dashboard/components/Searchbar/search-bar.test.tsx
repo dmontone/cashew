@@ -4,7 +4,7 @@ import { SearchBar } from './search-bar'
 import routes from '~/router/routes'
 import { handleApi } from '~/utils'
 import { DashContext } from '~/context'
-import { act } from 'react'
+import { DashStateType } from '~/context/types'
 
 const mockHistoryPush = jest.fn()
 jest.mock('react-router-dom', () => ({
@@ -24,7 +24,7 @@ const mockGetAll = handleApi.getAll as jest.Mock
 describe('components/search-bar', () => {
   const user = userEvent.setup()
   const mockDispatch = jest.fn()
-  const renderWithContext = (value: any = {}) => render(
+  const renderWithContext = (value: DashStateType = {} as DashStateType) => render(
     <DashContext.Provider value={[value, mockDispatch]}>
       <SearchBar />
     </DashContext.Provider>

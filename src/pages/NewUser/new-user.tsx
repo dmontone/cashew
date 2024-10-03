@@ -28,7 +28,7 @@ export const NewUserPage = () => {
     if (isFetching)
       return
 
-    let validationErrors: string[] = []
+    const validationErrors: string[] = []
     if (!validations.isName(name)) validationErrors.push('name')
     if (!validations.isEmail(email)) validationErrors.push('email')
     if (!validations.isCpf(cpf)) validationErrors.push('cpf')

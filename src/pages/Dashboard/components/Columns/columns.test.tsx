@@ -1,6 +1,7 @@
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import { Collumns } from './columns'
 import { DashContext } from '~/context'
+import { DashStateType } from '~/context/types'
 
 jest.mock('./constants', () => ({
   ALL_COLUMNS: [
@@ -15,7 +16,7 @@ jest.mock('../RegistrationCard', () => ({
 }))
 
 describe('pages/dashboard/columns', () => {
-  const renderWithContext = (value: any) => {
+  const renderWithContext = (value: [DashStateType, jest.Mock] = [{} as DashStateType, jest.fn()]) => {
     return render(
       <DashContext.Provider value={value}>
         <Collumns />
@@ -24,21 +25,21 @@ describe('pages/dashboard/columns', () => {
   }
 
   it('should render columns as they are in constants file', () => {
-    renderWithContext([{ isFetching: false, registrations: [] }])
+    renderWithContext([{ isFetching: false, registrations: [] } as unknown as DashStateType, jest.fn()])
 
     const columns = screen.getAllByText(/TEST_TITLE_(1|2|3)/)
     expect(columns.length).toEqual(3)
   })
 
   it('should display loading icon when fetching', () => {
-    renderWithContext([{ isFetching: false, registrations: [] }])
+    renderWithContext([{ isFetching: false, registrations: [] } as unknown as DashStateType, jest.fn()])
 
     const loadingIcons = screen.getAllByLabelText('loading')
     expect(loadingIcons.length).toEqual(3)
   })
 
   it('should display loading icon when fetching', () => {
-    renderWithContext([{ isFetching: false, registrations: [] }])
+    renderWithContext([{ isFetching: false, registrations: [] } as unknown as DashStateType, jest.fn()])
 
     const loadingIcons = screen.getAllByLabelText('loading')
     expect(loadingIcons.length).toEqual(3)
@@ -51,9 +52,8 @@ describe('pages/dashboard/columns', () => {
       { id: 3, employeeName: 'TEST_EMPLOYEENAME_3', status: 'REPROVED' }
     ]
 
-    renderWithContext([{ isFetching: false, registrations }])
+    renderWithContext([{ isFetching: false, registrations } as unknown as DashStateType, jest.fn()])
 
-    // Verifica se os cartões estão presentes na coluna correta
     const reviewColumn = screen.getByText('TEST_TITLE_1')
     const reviewColumnContent = within(reviewColumn.closest('div')!)
     expect(reviewColumnContent.getByText('TEST_EMPLOYEENAME_1')).toBeInTheDocument()

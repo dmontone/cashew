@@ -1,4 +1,4 @@
-import { validations } from './validations' // Replace with the actual file name
+import { validations } from './validations'
 
 describe('utils/validations', () => {
   it('should return true for valid names', () => {

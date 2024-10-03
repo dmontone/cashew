@@ -2,7 +2,6 @@ import { render, screen, waitFor } from '@testing-library/react'
 import { NewUserPage } from './new-user'
 import userEvent from '@testing-library/user-event'
 import routes from '~/router/routes'
-import { act } from 'react'
 import { handleApi } from '~/utils'
 
 jest.mock('~/utils', () => ({
@@ -73,7 +72,6 @@ describe('pages/dashboard', () => {
     const admissionDateInput = screen.getByLabelText(/Data de admissão/)
     const registerButton = screen.getByText(/Cadastrar/)
 
-    // Fill in valid data
     await userEvent.type(nameInput, 'Test Name')
     await userEvent.type(emailInput, 'email@example.com')
     await userEvent.type(cpfInput, '123.456.789-09')
@@ -104,7 +102,6 @@ describe('pages/dashboard', () => {
     const admissionDateInput = screen.getByLabelText(/Data de admissão/)
     const registerButton = screen.getByText(/Cadastrar/)
 
-    // Fill in valid data
     await userEvent.type(nameInput, 'Test Name')
     await userEvent.type(emailInput, 'email@example.com')
     await userEvent.type(cpfInput, '123.456.789-09')
