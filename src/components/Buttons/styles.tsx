@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const IconButtonStyles = styled.button`
   cursor: pointer;
@@ -34,6 +34,7 @@ export const Button = styled.button`
 export const ButtonSmall = styled.button<{
   bgcolor?: string;
   color?: string;
+  disabled?: boolean;
 }>`
   font-size: 12px;
   outline: none;
@@ -43,4 +44,9 @@ export const ButtonSmall = styled.button<{
   background-color: ${(props) => props.bgcolor ?? 'none'};
   color: ${(props) => props.color ?? "#000"};
   cursor: pointer;
+
+  ${(props) => props.disabled && css`
+    opacity: .5;
+    cursor: progress;
+  `}
 `;

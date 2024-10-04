@@ -1,6 +1,7 @@
-import Router from "~/router";
-import { Header } from "./components/Header";
-import { DashProvider } from './context'
+import Router from '~/router'
+import { Header } from './components/Header'
+import { Providers } from './providers'
+import { Modal } from './components'
 
 function App() {
   return (
@@ -8,11 +9,12 @@ function App() {
       <Header>
         <h1>Caju Front Teste</h1>
       </Header>
-      <DashProvider>
+      <Providers>
         <Router />
-      </DashProvider>
+        <Modal />
+      </Providers>
     </>
-  );
+  )
 }
 
-export default App;
+export default App

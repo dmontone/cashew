@@ -21,15 +21,27 @@ jest.mock('~/utils', () => ({
     getAll: jest.fn(),
   },
 }))
-
 const mockGetAll = handleApi.getAll as jest.Mock
 const mockUpdateStatus = handleApi.updateStatus as jest.Mock
-const mockDelete = handleApi.updateStatus as jest.Mock
+const mockDelete = handleApi.deleteItem as jest.Mock
+
+const mockOpen = jest.fn()
+const mockClose = jest.fn()
+const mockDisable = jest.fn()
+jest.mock('~/hooks', () => ({
+  useModal: () => ({
+    open: mockOpen,
+    close: mockClose,
+    disable: mockDisable
+  })
+}))
+
 
 
 describe('pages/dashboard/components/registration-card', () => {
   const user = userEvent.setup()
-  const renderWithContext = (registration: RegistrationType = mockRegistration, value: [DashStateType, jest.Mock] = [{} as DashStateType, jest.fn()]) => render(
+  const mockDispatch = jest.fn()
+  const renderWithContext = (registration: RegistrationType = mockRegistration, value: [DashStateType, jest.Mock] = [{} as DashStateType, mockDispatch]) => render(
     <DashContext.Provider value={value}>
       <RegistrationCard {...registration} />
     </DashContext.Provider>
@@ -37,6 +49,9 @@ describe('pages/dashboard/components/registration-card', () => {
 
   beforeEach(() => {
     jest.resetAllMocks()
+    mockGetAll.mockResolvedValue({ data: 'TEST_DATA', error: null })
+    mockUpdateStatus.mockResolvedValue({})
+    mockDelete.mockResolvedValue({})
   })
 
   it('should render admission date, employeeName and email as properties', () => {
@@ -75,95 +90,124 @@ describe('pages/dashboard/components/registration-card', () => {
     expect(reviewButton).toBeInTheDocument()
   })
 
-  it('should dispatch, updateStatus and getAll correctly on approve action', async () => {
-    const mockDispatch = jest.fn()
-    mockUpdateStatus.mockResolvedValue({})
-    mockGetAll.mockResolvedValue({ data: 'TEST_DATA', error: null })
-    renderWithContext({ ...mockRegistration, status: 'REVIEW' }, [{} as DashStateType, mockDispatch])
+  it('should call modal with correct texts on aprove click', async () => {
+    renderWithContext({ ...mockRegistration, status: 'REVIEW' })
 
-    const approveButton = screen.getByText('Aprovar')
-    
-    await user.click(approveButton)
+    const aproveButton = screen.getByText('Aprovar')
+    await user.click(aproveButton)
 
-    expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_INIT' })
-    expect(handleApi.updateStatus).toHaveBeenCalledWith('TEST_ID', { ...mockRegistration, status: 'APROVED' })
-    expect(handleApi.getAll).toHaveBeenCalled()
-
-    await waitFor(() => {
-      expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_SUCCESS', payload: 'TEST_DATA' })
-    })
+    expect(mockOpen).toHaveBeenCalledTimes(1)
+    expect(mockOpen).toHaveBeenCalledWith(expect.objectContaining({
+      title: 'Alteração de status',
+      message: 'Alterando o registro de TEST_EMPLOYEE_NAME de pronto para revisar para aprovado...',
+    }))
   })
 
-  it('should dispatch, updateStatus and getAll correctly on reprove action', async () => {
-    const mockDispatch = jest.fn()
-    mockUpdateStatus.mockResolvedValue({})
-    mockGetAll.mockResolvedValue({ data: 'TEST_DATA', error: null })
-    renderWithContext({ ...mockRegistration, status: 'REVIEW' }, [{} as DashStateType, mockDispatch])
+  it('should call modal with correct texts on reprove click', async () => {
+    renderWithContext({ ...mockRegistration, status: 'REVIEW' })
 
     const reproveButton = screen.getByText('Reprovar')
-    
     await user.click(reproveButton)
 
-    expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_INIT' })
-    expect(handleApi.updateStatus).toHaveBeenCalledWith('TEST_ID', { ...mockRegistration, status: 'REPROVED' })
-    expect(handleApi.getAll).toHaveBeenCalled()
-
-    await waitFor(() => {
-      expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_SUCCESS', payload: 'TEST_DATA' })
-    })
+    expect(mockOpen).toHaveBeenCalledTimes(1)
+    expect(mockOpen).toHaveBeenCalledWith(expect.objectContaining({
+      title: 'Alteração de status',
+      message: 'Alterando o registro de TEST_EMPLOYEE_NAME de pronto para revisar para reprovado...',
+    }))
   })
 
-  it('should dispatch, updateStatus and getAll correctly on review action', async () => {
-    const mockDispatch = jest.fn()
-    mockUpdateStatus.mockResolvedValue({})
-    mockGetAll.mockResolvedValue({ data: 'TEST_DATA', error: null })
-    renderWithContext({ ...mockRegistration, status: 'APROVED' }, [{} as DashStateType, mockDispatch])
+  it('should call modal with correct texts on review click', async () => {
+    renderWithContext({ ...mockRegistration, status: 'APROVED' })
 
     const reviewButton = screen.getByText(/Revisar novamente/)
-    
     await user.click(reviewButton)
 
-    expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_INIT' })
-    expect(handleApi.updateStatus).toHaveBeenCalledWith('TEST_ID', { ...mockRegistration, status: 'REVIEW' })
-    expect(handleApi.getAll).toHaveBeenCalled()
-
-    await waitFor(() => {
-      expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_SUCCESS', payload: 'TEST_DATA' })
-    })
+    expect(mockOpen).toHaveBeenCalledTimes(1)
+    expect(mockOpen).toHaveBeenCalledWith(expect.objectContaining({
+      title: 'Alteração de status',
+      message:  'Alterando o registro de TEST_EMPLOYEE_NAME de aprovado para pronto para revisar...',
+    }))
   })
 
-  it('should dispatch, delete and getAll correctly on delete action', async () => {
-    const mockDispatch = jest.fn()
-    mockDelete.mockResolvedValue({})
-    mockGetAll.mockResolvedValue({ data: 'TEST_DATA', error: null })
-    renderWithContext({ ...mockRegistration, status: 'APROVED' }, [{} as DashStateType, mockDispatch])
+  it('should call modal with correct texts on delete click', async () => {
+    renderWithContext({ ...mockRegistration, status: 'APROVED' })
 
-    const deleteButton = screen.getByLabelText('delete')
-    
+    const deleteButton = screen.getByLabelText(/delete/)
     await user.click(deleteButton)
 
-    expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_INIT' })
-    expect(handleApi.deleteItem).toHaveBeenCalledWith('TEST_ID')
-    expect(handleApi.getAll).toHaveBeenCalled()
-
-    await waitFor(() => {
-      expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_SUCCESS', payload: 'TEST_DATA' })
-    })
+    expect(mockOpen).toHaveBeenCalledTimes(1)
+    expect(mockOpen).toHaveBeenCalledWith(expect.objectContaining({
+      title: 'Excluir registro',
+      message:  'Excluindo o registro de TEST_EMPLOYEE_NAME...',
+    }))
   })
 
-  it('should dispatch error on error', async () => {
-    const mockDispatch = jest.fn()
-    mockDelete.mockResolvedValue({})
-    mockGetAll.mockResolvedValue({ data: null, error: 'TEST_ERROR' })
-    renderWithContext({ ...mockRegistration, status: 'APROVED' }, [{} as DashStateType, mockDispatch])
+  it('should call modal with correct onCancel function, calling modal close', async () => {
+    renderWithContext({ ...mockRegistration, status: 'APROVED' })
 
-    const deleteButton = screen.getByLabelText('delete')
+    const reviewButton = screen.getByText(/Revisar novamente/)
+    await user.click(reviewButton)
+
+    const mockOpenProps = mockOpen.mock.lastCall[0]
+    mockOpenProps.onCancel()
+
+    expect(mockClose).toHaveBeenCalledTimes(1)
+  })
+
+  it('should call modal with correct onConfirm call sequence', async () => {
+    mockGetAll.mockResolvedValueOnce({ data: {}, error: null })
+    renderWithContext({ ...mockRegistration, status: 'APROVED' })
+
+    const reviewButton = screen.getByText(/Revisar novamente/)
+    await user.click(reviewButton)
+
+    const mockOpenProps = mockOpen.mock.lastCall[0]
+    mockOpenProps.onConfirm()
+
+    expect(mockDisable).toHaveBeenCalledTimes(1)
+    expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_INIT' })
     
+    await waitFor(() => {
+      expect(mockUpdateStatus).toHaveBeenCalledWith('TEST_ID', { ...mockRegistration, status: 'REVIEW' })
+      expect(mockGetAll).toHaveBeenCalledTimes(1)
+    })
+    expect(mockClose).toHaveBeenCalledTimes(1)
+    expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_SUCCESS', payload: {}})
+  })
+
+  it('should call modal with correct onConfirm call sequence at deletion', async () => {
+    mockGetAll.mockResolvedValueOnce({ data: {}, error: null })
+    renderWithContext({ ...mockRegistration, status: 'APROVED' })
+
+    const deleteButton = screen.getByLabelText(/delete/)
     await user.click(deleteButton)
 
+    const mockOpenProps = mockOpen.mock.lastCall[0]
+    mockOpenProps.onConfirm()
+
+    expect(mockDisable).toHaveBeenCalledTimes(1)
     expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_INIT' })
+    
     await waitFor(() => {
-      expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_ERROR', payload: 'TEST_ERROR' })
+      expect(mockDelete).toHaveBeenCalledWith('TEST_ID')
+      expect(mockGetAll).toHaveBeenCalledTimes(1)
+    })
+    expect(mockClose).toHaveBeenCalledTimes(1)
+    expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_SUCCESS', payload: {}})
+  })
+
+  it('should dispatch error on refetch error', async () => {
+    mockGetAll.mockResolvedValueOnce({ data: null, error: 'TEST_ERROR' })
+    renderWithContext({ ...mockRegistration, status: 'APROVED' })
+
+    const deleteButton = screen.getByLabelText(/delete/)
+    await user.click(deleteButton)
+
+    const mockOpenProps = mockOpen.mock.lastCall[0]
+    mockOpenProps.onConfirm()
+    
+    await waitFor(() => {
+      expect(mockDispatch).toHaveBeenCalledWith({ type: 'FETCH_CARDS_ERROR', payload: 'TEST_ERROR'})
     })
   })
 })

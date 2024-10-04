@@ -40,7 +40,7 @@ export const NewUserPage = () => {
         employeeName: name,
         email,
         cpf,
-        admissionDate: date,
+        admissionDate: new Date(date + 'T12:00:00').toLocaleDateString('pt-BR'),
         status: 'REVIEW'
       }
 

@@ -85,7 +85,7 @@ describe('pages/dashboard', () => {
         employeeName: 'Test Name',
         email: 'email@example.com',
         cpf: '123.456.789-09',
-        admissionDate: '2023-10-01',
+        admissionDate: '01/10/2023',
         status: 'REVIEW',
       })
       expect(mockHistoryPush).toHaveBeenCalledWith(routes.dashboard)

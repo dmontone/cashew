@@ -1,5 +1,5 @@
 import { createContext, Dispatch, FC, ReactNode, useReducer } from 'react'
-import { DashReducer, initialState } from './reducer'
+import { DashReducer, initialState } from './reducer-dashboard'
 import { DashActionsInputType, DashReducerInterface, DashStateType } from './types'
 
 type ContextType = [DashStateType, Dispatch<DashActionsInputType>]

@@ -15,4 +15,23 @@ export type DashActionsInputType =
 
 export type DashActionsType = {}
 
-export interface DashReducerInterface extends Reducer<DashStateType, DashActionsInputType> {}
+export interface DashReducerInterface extends Reducer<DashStateType, DashActionsInputType> { }
+
+export type AppStateType = {
+  modal: {
+    isOpen: boolean,
+    isEnabled: boolean,
+    title: string,
+    message: string,
+    onCancel: () => void,
+    onConfirm: () => void
+  }
+}
+
+export type AppActionsInputType =
+  { type: 'MODAL_OPEN', payload: { title: string, message: string, onCancel: () => void, onConfirm: () => void }}
+  | { type: 'MODAL_CLOSE' }
+  | { type: 'MODAL_DISABLE' }
+  | { type: 'MODAL_ENABLE' }
+
+export interface AppReducerInterface extends Reducer<AppStateType, AppActionsInputType> { }
